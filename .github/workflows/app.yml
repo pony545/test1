@@ -17,21 +17,14 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: main
-      # 安装 Node.js    
+      # 安装 Node.js
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: "14.x"
+          node-version: "16.x"
           registry-url: https://registry.npmjs.org/
-        
-      # rawimg/ 作为原始图片存储，webpimg/ 作为压缩图片存储处，最后合并。
-      # 安装相关插件，转换图片。
-      - name: Install & Convert
-        run: |
-          npm install -g webp-batch-convert
-          cwebp-batch --in rawimg --out webpimg -q 75 --quiet
-          mv webpimg/*.webp rawimg/
-          
+
+
       # 发布 NPM 包
       - name: Publish Package
         run: |
@@ -41,15 +34,15 @@ jobs:
           npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
-          
-      # 删除 rawimg/ 和 webpimg/ 下的所有文件
+
+      # 删除 app1/ 和 app2/ 下的所有文件
       - name: Delete Files
         run: |
-          rm -rf webpimg/*
-          rm -rf rawimg/*
-          touch webpimg/.gitkeep
-          touch rawimg/.gitkeep
-          
+          rm -rf app1/*
+          rm -rf app2/*
+          touch app1/.gitkeep
+          touch app2/.gitkeep
+
       - name: Push
         run: |
           git add -A
